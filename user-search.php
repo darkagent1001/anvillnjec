@@ -8,14 +8,26 @@
 
         if(!isset($_SESSION['errors'])){
 
-            $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username'");
-            $result = $stmt -> fetch_assoc();
+            if(!isset($_SESSION['is_prepared'])){
 
-            $mysqli -> close();
+                $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username';");
+                $user = $stmt -> fetch_assoc();
+
+            } else {
+
+                $stmt = $mysqli -> prepare("SELECT * FROM `users` WHERE `username` = ?;");
+                $stmt -> bind_param('s', $username);
+                $stmt -> execute();
+                $user = $stmt -> get_result() -> fetch_assoc();
+
+            }
+
 
         }
 
     }
+    
+    $mysqli -> close();
 
 ?>
 
@@ -27,11 +39,11 @@
                 Search
             </button>
         </form>
-        <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && $stmt -> num_rows){ ?>
+        <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && count($user)){ ?>
             <div class="card max-w-[350px] mt-14">
                 <div class="card-content">
-                    <p><?= $result['username'] ?></p>
-                    <p class="mt-3"><?= $result['bio'] ?></p>
+                    <p><?= $user['username'] ?></p>
+                    <p class="mt-3"><?= $user['bio'] ?></p>
                 </div>
             </div>
         <?php } ?>

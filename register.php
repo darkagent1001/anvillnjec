@@ -21,7 +21,17 @@
 
         if(!isset($_SESSION['errors'])){
 
-            $stmt = $mysqli -> query("INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$password');");
+            if(!isset($_SESSION['is_prepared'])){
+
+                $stmt = $mysqli -> query("INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$password');");
+
+            } else {
+
+                $stmt = $mysqli -> prepare("INSERT INTO `users` (`username`, `password`) VALUES (?, ?);");
+                $stmt -> bind_param('ss', $username, $password);
+                $stmt -> execute();
+
+            }
 
             $userController -> login($username);
 

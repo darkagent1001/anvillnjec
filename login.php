@@ -16,9 +16,20 @@
 
         $fieldsCleaner -> required(['username', 'password']);
 
-        $statement = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password' LIMIT 1;");
+        if(!isset($_SESSION['is_prepared'])){
 
-        if(!$statement -> num_rows){
+            $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password' LIMIT 1;");
+
+        } else {
+
+            $stmt = $mysqli -> prepare("SELECT * FROM `users` WHERE `username` = ? AND `password` = ? LIMIT 1;");
+            $stmt -> bind_param('ss', $username, $password);
+            $stmt -> execute();
+            $stmt -> store_result();
+
+        }
+
+        if(!$stmt -> num_rows){
 
             $_SESSION['errors']['Incorrect informations'] = 'Your username or password is incorrect.';
 

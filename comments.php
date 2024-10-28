@@ -2,27 +2,42 @@
 
     require_once __DIR__ . '/templates/header.php';
 
-    $stmt = $mysqli -> query("SELECT *, u.id AS commenter_id FROM `comments` c INNER JOIN `users` u ON u.id = user_id;");
-    $result = $stmt -> fetch_all(MYSQLI_ASSOC);
-
-    if(isset($_SESSION['user']['id'])){
+    if(isset($_SESSION['user'])){
 
         $userId = $_SESSION['user']['id'];
 
     }
 
+    $stmt = $mysqli -> query("SELECT *, c.id AS comment_id, u.id AS commenter_id FROM comments c LEFT JOIN users u ON c.user_id = u.id;");
+    $comments = $stmt -> fetch_all(MYSQLI_ASSOC);
+
+
+
+
     if(isset($_REQUEST['send_comment'])){
-        
+
         $commentContent = $_REQUEST['comment_content'];
         $date = date('Y-m-d');
 
         if(!isset($_SESSION['errors'])){
 
-            $stmt2 = $mysqli -> query("INSERT INTO `comments` (content, user_id, created_at) VALUES ('$commentContent', '$userId', '$date');");
+            if(!isset($_SESSION['is_prepared'])){
 
-            header('location: ' . $_SERVER['PHP_SELF']);
+                $stmt2 = $mysqli -> query("INSERT INTO `comments` (content, user_id, created_at) VALUES ('$commentContent', '$userId', '$date');");
+
+            } else {
+
+                $stmt2 = $mysqli -> prepare("INSERT INTO `comments` (content, user_id, created_at) VALUES (?, ?, ?);");
+                $stmt2 -> bind_param('sss', $commentContent, $userId, $date);
+                $stmt2 -> execute();
+
+                header('location: ' . $_SERVER['PHP_SELF']);
+                die();
+
+            }
 
         }
+
 
     }
 
@@ -30,19 +45,40 @@
 
         $commentId = $_REQUEST['comment_id'];
 
-        $stmt2 = $mysqli -> query("SELECT `id`, `user_id` FROM comments WHERE id = '$commentId';");
-        $result2 = $stmt2 -> fetch_assoc();
+        if(!isset($_SESSION['is_prepared'])){
 
-        if($result2['user_id'] != $_SESSION['user']['id']){
+            $stmt2 = $mysqli -> query("SELECT `id`, `user_id` FROM `comments` WHERE `id` = '$commentId';");
+            $result = $stmt2 -> fetch_assoc();
 
-            $_SESSION['errors']['Unauthorized user'] = 'Permession denied for deleting this comment.';
+        } else {
+
+            $stmt2 = $mysqli -> prepare("SELECT `id`, `user_id` FROM `comments` WHERE `id` = ?;");
+            $stmt2 -> bind_param('i', $commentId);
+            $stmt2 -> execute();
+            $result = $stmt2 -> get_result() -> fetch_assoc();
+
+        }
+
+        if($result['user_id'] != $userId){
+
+            $_SESSION['errors']['Unauthorized user'] = 'Permession denied for deleting the comment.';
 
         }
 
         if(!isset($_SESSION['errors'])){
 
-            $stmt2 = $mysqli -> query("DELETE FROM `comments` WHERE `id` = '$commentId';");
-            
+            if(!isset($_SESSION['is_prepared'])){
+
+                $stmt2 = $mysqli -> query("DELETE FROM `comments` WHERE id = '$commentId';");
+
+            } else {
+
+                $stmt2 = $mysqli -> prepare("DELETE FROM `comments` WHERE id = ?;");
+                $stmt2 -> bind_param('i', $commentId);
+                $stmt2 -> execute();
+
+            }
+
             header('location: ' . $_SERVER['PHP_SELF']);
             die();
 
@@ -51,6 +87,7 @@
     }
 
     $mysqli -> close();
+
 
 ?>
 
@@ -68,14 +105,14 @@
         <?php } ?>
         <?php if($stmt -> num_rows){ ?>
             <div class="mt-14 grid gap-8">
-                <?php foreach($result as $comment){ ?>
+                <?php foreach($comments as $comment){ ?>
                     <div class="card w-full">
                         <div class="card-content">
                             <h2 class="card-title"><?= $comment['username'] . ' Says:' ?></h2>
                             <p class="text-dimmed mt-3"><?= $comment['content'] ?></p>
                             <?php if(isset($_SESSION['user']) && $comment['user_id'] == $_SESSION['user']['id']){ ?>
                                 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST">
-                                    <input name="comment_id" type="text" value="<?= $comment['id'] ?>" hidden>
+                                    <input name="comment_id" type="text" value="<?= $comment['comment_id'] ?>" hidden>
                                     <button type="submit" name="delete_comment" onclick="return confirm('Are you sure?')" class="bg-error-500 mt-10 text-white-50 hover:bg-error-400 shadow-[0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] dark:shadow-[0px_4px_6px_-5px_#e94a4a,0px_8px_6px_-2px_rgba(233,74,74,0.20),0px_10px_5px_0px_rgba(255,255,255,0.10)_inset]">
                                         Delete
                                     </button>

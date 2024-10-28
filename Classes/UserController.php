@@ -6,8 +6,19 @@ class UserController {
 
         global $mysqli;
 
-        $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username' LIMIT 1;");
-        $user = $stmt -> fetch_assoc();
+        if(!isset($_SESSION['is_prepared'])){
+
+            $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username' LIMIT 1;");
+            $user = $stmt -> fetch_assoc();
+
+        } else {
+
+            $stmt = $mysqli -> prepare("SELECT * FROM `users` WHERE `username` = ? LIMIT 1;");
+            $stmt -> bind_param('s', $username);
+            $stmt -> execute();
+            $user = $stmt -> get_result() -> fetch_assoc();
+
+        }
 
         $_SESSION['user']['id'] = $user['id'];
         $_SESSION['user']['username'] = $user['username'];
