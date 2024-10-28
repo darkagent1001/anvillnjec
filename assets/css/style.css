@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@layer base {
+  html {
+    @apply font-body;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply dark:bg-midnight-950;
+  }
+
+  a {
+    @apply no-underline transition-all;
+  }
+}
+
+@layer components {
+  button,
+  .button {
+    @apply inline-block select-none rounded px-3 py-2 text-base font-medium outline-none transition-all has-[svg]:inline-flex has-[svg]:items-center has-[svg]:justify-center has-[svg]:gap-2 [&_svg]:self-start;
+  }
+
+  svg {
+    @apply flex-none shrink-0;
+  }
+
+  .card {
+    @apply mx-auto w-full overflow-hidden rounded bg-white-50 shadow dark:bg-midnight-900 dark:shadow-none;
+  }
+
+  .card-content {
+    @apply p-6;
+  }
+
+  .card-title {
+    @apply text-xl font-medium;
+  }
+
+  .form-input {
+    @apply text-dimmed rounded border border-white-500 bg-transparent px-3 py-2 outline-none transition-all focus:border-primary-500 dark:border-midnight-900 dark:bg-midnight-900 dark:text-white-50 dark:focus:border-primary-500;
+  }
+
+  .section-title-parent {
+    @apply mx-auto max-w-[660px] text-center *:font-semibold;
+  }
+
+  .section-title {
+    @apply text-lg font-medium text-primary-500;
+  }
+
+  .section-description {
+    @apply mt-4 text-[28px];
+  }
+
+  .container {
+    @apply mx-auto w-full px-4 md:w-4/5;
+  }
+
+  .container-full {
+    @apply mx-auto w-full px-4;
+  }
+
+  .navbar {
+    @apply flex items-center gap-7 px-7 py-5;
+  }
+
+  .navbar-title {
+    @apply flex items-center gap-3 text-xl font-medium;
+  }
+
+  .navbar-collapse {
+    @apply invisible fixed left-2/4 top-14 z-20 grid w-11/12 -translate-x-2/4 scale-90 gap-4 rounded bg-white-50 p-6 opacity-0 shadow transition-all duration-200 dark:bg-midnight-900 dark:shadow-none md:visible md:static md:z-auto md:flex md:translate-x-0 md:scale-100 md:items-center md:bg-transparent md:p-0 md:opacity-100 md:shadow-none md:transition-none dark:md:bg-transparent;
+  }
+
+  .navbar-collapse.show {
+    @apply visible scale-100 opacity-100;
+  }
+
+  .navbar-list {
+    @apply grid gap-4 md:flex md:items-center;
+  }
+
+  .navbar-link {
+    @apply hover:text-dimmed;
+  }
+
+  .navbar-button {
+    @apply z-50 ms-auto p-2 hover:bg-white-200 dark:hover:bg-midnight-900 md:hidden;
+  }
+}
+
+@layer utilities {
+  .text-dimmed {
+    @apply text-dimmed-black dark:text-dimmed-white;
+  }
+}
