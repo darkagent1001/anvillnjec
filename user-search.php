@@ -39,7 +39,7 @@
                 Search
             </button>
         </form>
-        <?php if($_SERVER['REQUEST_METHOD'] == 'POST' && count($user)){ ?>
+        <?php if(isset($user) && ($_SERVER['REQUEST_METHOD'] == 'POST' && count($user))){ ?>
             <div class="card max-w-[350px] mt-14">
                 <div class="card-content">
                     <p class="card-title text-2xl"><?= $user['username'] ?></p>
