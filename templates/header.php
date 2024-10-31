@@ -26,9 +26,8 @@
         </a>
         <div id="main-navbar" class="navbar-collapse">
             <div class="navbar-list">
-                <a href="#" class="navbar-link">Home</a>
-                <a href="#" class="navbar-link">Examples</a>
-                <a href="#" class="navbar-link">About us</a>
+                <a href="index.php" class="navbar-link">Home</a>
+                <a href="index.php#examples" class="navbar-link">Examples</a>
                 <a href="use-prepared.php" class="navbar-link">
                     <?php if(isset($_SESSION['is_prepared']) && $_SESSION['is_prepared']){ ?>
                         Unuse prepared SQL
