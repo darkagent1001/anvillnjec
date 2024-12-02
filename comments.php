@@ -1,6 +1,9 @@
 <?php
 
     require_once __DIR__ . '/templates/header.php';
+    require_once __DIR__ . '/Classes/DbQueries.php';
+
+    $dbQueries = new DbQueries;
 
     if(isset($_SESSION['user'])){
 
@@ -8,8 +11,7 @@
 
     }
 
-    $stmt = $mysqli -> query("SELECT *, c.id AS comment_id, u.id AS commenter_id FROM comments c LEFT JOIN users u ON c.user_id = u.id;");
-    $comments = $stmt -> fetch_all(MYSQLI_ASSOC);
+    $comments = $dbQueries -> unsafe("SELECT *, c.id AS comment_id, u.id AS commenter_id FROM comments c LEFT JOIN users u ON c.user_id = u.id;", "get", false);
 
 
 
@@ -47,15 +49,11 @@
 
         if(!isset($_SESSION['is_prepared'])){
 
-            $stmt2 = $mysqli -> query("SELECT `id`, `user_id` FROM `comments` WHERE `id` = '$commentId';");
-            $result = $stmt2 -> fetch_assoc();
+            $result = $dbQueries -> unsafe("SELECT `id`, `user_id` FROM `comments` WHERE `id` = '$commentId';", 'get', true);
 
         } else {
 
-            $stmt2 = $mysqli -> prepare("SELECT `id`, `user_id` FROM `comments` WHERE `id` = ?;");
-            $stmt2 -> bind_param('i', $commentId);
-            $stmt2 -> execute();
-            $result = $stmt2 -> get_result() -> fetch_assoc();
+            $result = $dbQueries -> safe("SELECT `id`, `user_id` FROM `comments` WHERE `id` = ?;", "get", true, (int)$commentId);
 
         }
 
@@ -69,13 +67,11 @@
 
             if(!isset($_SESSION['is_prepared'])){
 
-                $stmt2 = $mysqli -> query("DELETE FROM `comments` WHERE id = '$commentId';");
+                $dbQueries -> unsafe("DELETE FROM `comments` WHERE id = '$commentId';", "post");
 
             } else {
 
-                $stmt2 = $mysqli -> prepare("DELETE FROM `comments` WHERE id = ?;");
-                $stmt2 -> bind_param('i', $commentId);
-                $stmt2 -> execute();
+                $dbQueries -> safe("DELETE FROM `comments` WHERE id = ?;", "post", true, (int)$commentId);
 
             }
 
@@ -103,7 +99,7 @@
                 </button>
             </form>
         <?php } ?>
-        <?php if($stmt -> num_rows){ ?>
+        <?php if(count($comments)){ ?>
             <div class="mt-14 grid gap-8">
                 <?php foreach($comments as $comment){ ?>
                     <div class="card w-full">

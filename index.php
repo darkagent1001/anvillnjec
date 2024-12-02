@@ -1,9 +1,11 @@
 <?php 
 
     require_once __DIR__ . '/templates/header.php';
+    require_once __DIR__ . '/Classes/DbQueries.php';
 
-    $stmt = $mysqli -> query("SELECT * FROM `users`;");
-    $users = $stmt -> fetch_all(MYSQLI_ASSOC);
+    $dbQueries = new DbQueries;
+
+    $users = $dbQueries -> unsafe("SELECT * FROM `users`;", "get", false);
 
     $mysqli -> close();
 

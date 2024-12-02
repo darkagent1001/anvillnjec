@@ -1,6 +1,9 @@
 <?php
 
     require_once __DIR__ . '/templates/header.php';
+    require_once __DIR__ . '/Classes/DbQueries.php';
+
+    $dbQueries = new DbQueries;
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -10,15 +13,11 @@
 
             if(!isset($_SESSION['is_prepared'])){
 
-                $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username';");
-                $user = $stmt -> fetch_assoc();
+                $user = $dbQueries -> unsafe("SELECT * FROM `users` WHERE `username` = '$username';", "get", true);
 
             } else {
 
-                $stmt = $mysqli -> prepare("SELECT * FROM `users` WHERE `username` = ?;");
-                $stmt -> bind_param('s', $username);
-                $stmt -> execute();
-                $user = $stmt -> get_result() -> fetch_assoc();
+                $user = $dbQueries -> safe("SELECT * FROM `users` WHERE `username` = ?;", "get", true, $username);
 
             }
 

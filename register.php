@@ -3,6 +3,9 @@
     require_once __DIR__ . '/templates/header.php';
     require_once __DIR__ . '/Classes/FieldsCleaner.php';
     require_once __DIR__ . '/Classes/UserController.php';
+    require_once __DIR__ . '/Classes/DbQueries.php';
+
+    $dbQueries = new DbQueries;
 
     $fieldsCleaner = new FieldsCleaner;
     $userController = new UserController;
@@ -23,13 +26,11 @@
 
             if(!isset($_SESSION['is_prepared'])){
 
-                $stmt = $mysqli -> query("INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$password');");
+                $dbQueries -> unsafe("INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$password');", "post");
 
             } else {
 
-                $stmt = $mysqli -> prepare("INSERT INTO `users` (`username`, `password`) VALUES (?, ?);");
-                $stmt -> bind_param('ss', $username, $password);
-                $stmt -> execute();
+                $dbQueries -> safe("INSERT INTO `users` (`username`, `password`) VALUES (?, ?);", "post", "", $username, $password);
 
             }
 
@@ -67,7 +68,7 @@
                     <input required type="password" name="password_confirmation" id="password-confirmation" value="<?= $fieldsCleaner -> old('password_confirmation'); ?>" class="form-input w-full dark:bg-midnight-700 dark:border-midnight-700">
                 </div>
             </div>
-            <button class="mt-10 bg-primary-500 shadow-[0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] dark:shadow-[0px_4px_6px_-5px_#6366F1,0px_8px_6px_-2px_rgba(99,102,241,0.20),0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] text-white-50 hover:bg-primary-400 px-8">Login</button>
+            <button class="mt-10 bg-primary-500 shadow-[0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] dark:shadow-[0px_4px_6px_-5px_#6366F1,0px_8px_6px_-2px_rgba(99,102,241,0.20),0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] text-white-50 hover:bg-primary-400 px-8">Register</button>
         </div>
     </form>
     <!-- Register form -->
