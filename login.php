@@ -3,6 +3,9 @@
     require_once __DIR__ . '/templates/header.php';
     require_once __DIR__ . '/Classes/FieldsCleaner.php';
     require_once __DIR__ . '/Classes/UserController.php';
+    require_once __DIR__ . '/Classes/DbQueries.php';
+
+    $dbQueries = new DbQueries;
 
     $fieldsCleaner = new FieldsCleaner;
     $userController = new UserController;
@@ -18,18 +21,15 @@
 
         if(!isset($_SESSION['is_prepared'])){
 
-            $stmt = $mysqli -> query("SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password' LIMIT 1;");
+            $user = $dbQueries -> unsafe("SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password' LIMIT 1;", "get", true);
 
         } else {
 
-            $stmt = $mysqli -> prepare("SELECT * FROM `users` WHERE `username` = ? AND `password` = ? LIMIT 1;");
-            $stmt -> bind_param('ss', $username, $password);
-            $stmt -> execute();
-            $stmt -> store_result();
+            $user = $dbQueries -> safe("SELECT * FROM `users` WHERE `username` = ? AND `password` = ? LIMIT 1;", "get", true, $username, $password);
 
         }
 
-        if(!$stmt -> num_rows){
+        if(empty($user) || !count($user)){
 
             $_SESSION['errors']['Incorrect informations'] = 'Your username or password is incorrect.';
 
