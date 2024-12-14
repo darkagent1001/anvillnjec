@@ -31,13 +31,6 @@
             <h1 class="text-4xl md:text-[44px] font-semibold leading-tight md:leading-[53px]">Test your skills on databases with SQL injection vulnerability</h1>
             <p class="text-lg text-dimmed mt-4 md:mt-6">Just a graduating project that i show it to my university and make them review it, and it work with php as Back-End language.</p>
             <div class="grid sm:flex *:w-full sm:*:w-auto items-center justify-center gap-4 sm:gap-6 mt-10">
-                <!-- <a href="#" class="button bg-primary-500 shadow-[0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] dark:shadow-[0px_4px_6px_-5px_#6366F1,0px_8px_6px_-2px_rgba(99,102,241,0.20),0px_10px_5px_0px_rgba(255,255,255,0.10)_inset] text-white-50 hover:bg-primary-400 px-3.5">
-                    Start with us
-                    <svg class="size-5" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.75 6.75L19.25 12L13.75 17.25"></path>
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 12H4.75"></path>
-                    </svg>                      
-                </a> -->
                 <a href="#examples" class="button bg-midnight-700 text-white-50 hover:bg-midnight-600 px-3.5 shadow-[0px_10px_5px_0px_rgba(97,97,111,0.10)_inset] dark:shadow-[0px_4px_6px_-5px_#282836,_0px_8px_6px_-2px_rgba(40,40,54,0.20),0px_10px_5px_0px_rgba(97,97,111,0.10)_inset]">See examples</a>
             </div>
         </div>
@@ -67,16 +60,6 @@
                     <p class="text-dimmed mt-2.5">We made more than one example and every one of them focus on its specific case.</p>
                 </div>
             </div>
-            <!-- <div>
-                <svg class="flex-none size-8 text-primary-500" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 17.25V9.75C19.25 8.64543 18.3546 7.75 17.25 7.75H4.75V17.25C4.75 18.3546 5.64543 19.25 6.75 19.25H17.25C18.3546 19.25 19.25 18.3546 19.25 17.25Z"></path>
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 7.5L12.5685 5.7923C12.2181 5.14977 11.5446 4.75 10.8127 4.75H6.75C5.64543 4.75 4.75 5.64543 4.75 6.75V11"></path>
-                </svg>                                                                      
-                <div>
-                    <h2 class="text-xl font-semibold">Documentation with examples</h2>
-                    <p class="text-dimmed mt-2.5">We wrote many documentations to how SQL injection effects on website security and how to close it.</p>
-                </div>
-            </div> -->
             <div>
                 <svg class="flex-none size-8 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 18.894V12m0 0L12 8.75 14.25 12m-4.5 0S10 14.25 12 14.25 14.25 12 14.25 12m0 0v6.894m5-6.894a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"></path>
@@ -144,8 +127,8 @@
      <section class="container mt-20">
         <!-- Section title -->
         <div class="section-title-parent">
-            <p class="section-title">Examples</p>
-            <h1 class="section-description">These are examples to practice on them:</h1>
+            <p class="section-title">Project members</p>
+            <h1 class="section-description">Project members team who worked on this project:</h1>
          </div>
         <!-- Section title -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
